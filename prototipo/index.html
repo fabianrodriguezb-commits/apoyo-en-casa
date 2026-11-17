@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apoyo en Casa · Prototipo IHC</title>
+<style>
+:root{--g:#0f5c58;--gd:#0b4643;--gl:#e3f3f0;--ink:#16213a;--mu:#5d6b7c;--bg:#e2e8f0;--card:#fff;--ln:#e5eaf0;--wa:#b45309;--wl:#fef3c7}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:"Segoe UI",Inter,system-ui,sans-serif;color:var(--ink);display:flex;gap:28px;justify-content:center;align-items:flex-start;padding:24px 12px;flex-wrap:wrap}
+nav{width:230px}
+nav h1{font-size:16px;margin:0 0 4px}nav p{font-size:12px;color:var(--mu);margin:0 0 14px}
+nav button{display:block;width:100%;text-align:left;padding:9px 12px;margin-bottom:6px;border:1px solid var(--ln);border-radius:10px;background:#fff;font:inherit;font-size:13px;cursor:pointer}
+nav button.on{background:var(--g);color:#fff;border-color:var(--g)}
+nav .reset{margin-top:10px;background:transparent;border-style:dashed}
+.phone{width:390px;height:844px;max-width:100%;background:#fff;border:10px solid #161c2d;border-radius:46px;overflow:hidden;display:flex;flex-direction:column;position:relative}
+.sb{height:34px;display:flex;justify-content:space-between;align-items:center;padding:0 24px;font-size:12px;font-weight:600;flex:none}
+.sb i{width:84px;height:22px;background:#161c2d;border-radius:12px;position:absolute;left:50%;top:8px;transform:translateX(-50%)}
+.scr{flex:1;overflow:auto;background:#f6f8fa;padding:14px 14px 28px}
+.top{display:flex;align-items:center;gap:10px;padding:8px 14px;background:#fff;border-bottom:1px solid var(--ln);flex:none}
+.top b{font-size:15px}.top small{display:block;color:var(--mu);font-size:11px}
+.back{border:0;background:none;font:inherit;font-size:14px;color:var(--g);cursor:pointer;padding:6px 0;font-weight:600}
+.chip{margin-left:auto;font-size:11px;background:#eef2f6;border-radius:99px;padding:4px 9px;color:var(--mu)}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:16px;padding:14px;margin-bottom:12px}
+h2{font-size:19px;margin:0 0 4px}h3{font-size:14px;margin:0 0 8px}
+.mu{color:var(--mu);font-size:12px}
+.btn{display:block;width:100%;border:0;border-radius:12px;background:var(--g);color:#fff;font:inherit;font-weight:600;font-size:14px;padding:13px;cursor:pointer;margin-top:10px}
+.btn:hover{background:var(--gd)}.btn.alt{background:#fff;color:var(--g);border:1.5px solid var(--g)}
+.btn.done{background:var(--gl);color:var(--gd);border:1.5px solid var(--g);cursor:default}
+button:focus-visible{outline:3px solid #f59e0b;outline-offset:2px}
+.row{display:flex;align-items:center;gap:12px;cursor:pointer}
+.av{width:46px;height:46px;border-radius:14px;background:var(--gl);color:var(--g);display:grid;place-items:center;font-weight:700;font-size:18px;flex:none}
+.tag{display:inline-block;font-size:11px;border-radius:99px;padding:3px 9px;background:var(--gl);color:var(--gd);font-weight:600}
+.tag.w{background:var(--wl);color:var(--wa)}
+.ev{border-left:5px solid var(--g)}.ev.n{border-left-color:#cbd5e1}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;font-size:13px}
+.cal span.h{font-size:11px;color:var(--mu)}
+.cal button{border:0;background:none;font:inherit;height:34px;border-radius:50%;cursor:pointer;position:relative}
+.cal button.ev2:after{content:"";position:absolute;bottom:3px;left:50%;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--g)}
+.cal button.sel{background:var(--g);color:#fff}.cal button.sel:after{background:#fff}
+ul.ck{list-style:none;padding:0;margin:0}ul.ck li{padding:6px 0 6px 26px;position:relative;font-size:14px}
+ul.ck li:before{content:"✓";position:absolute;left:0;color:var(--g);font-weight:700}
+.sheet{background:#fff;border:1px dashed #94a3b8;border-radius:6px;padding:14px;font-size:13px;line-height:1.5}
+.sheet h4{margin:0 0 6px;font-size:15px}.sheet .ln{border-bottom:1px solid #94a3b8;height:22px;margin:4px 0}
+.ok{text-align:center;padding:26px 8px}.ok .big{width:76px;height:76px;border-radius:50%;background:var(--gl);color:var(--g);font-size:38px;display:grid;place-items:center;margin:0 auto 14px}
+.toast{position:absolute;left:16px;right:16px;bottom:22px;background:#161c2d;color:#fff;border-radius:12px;padding:11px 14px;font-size:13px;display:none}
+@media print{nav,.top,.sb,.btn,.back{display:none}body{background:#fff}.phone{border:0;height:auto}}
+</style>
+</head>
+<body>
+<nav aria-label="Pantallas del prototipo">
+  <h1>Apoyo en Casa</h1>
+  <p>Prototipo de fidelidad media (390×844). Haga clic dentro del teléfono o salte a una pantalla.</p>
+  <div id="steps"></div>
+  <button class="reset" id="reset">Reiniciar estado</button>
+</nav>
+<main class="phone" aria-live="polite">
+  <div class="sb"><span>9:41</span><i></i><span>●●● 100%</span></div>
+  <div id="app" style="display:flex;flex-direction:column;flex:1;min-height:0"></div>
+  <div class="toast" id="toast" role="status"></div>
+</main>
+
+<script>
+var KIDS=[{n:"Matías",c:"4° Básico B",i:"M"},{n:"Sofía",c:"6° Básico A",i:"S"}];
+var EVS=[
+ {id:"cie",m:"Ciencias",t:"Prueba de Ciencias",d:18,f:"Miércoles 18 de noviembre",c:["Estados de la materia","Cambios de estado"]},
+ {id:"mat",m:"Matemática",t:"Prueba de Matemática",d:23,f:"Lunes 23 de noviembre",c:["Fracciones equivalentes","Suma y resta de fracciones","Problemas con fracciones"]},
+ {id:"len",m:"Lenguaje",t:"Prueba de Lenguaje",d:26,f:"Jueves 26 de noviembre",c:["Comprensión de textos narrativos","Uso de sinónimos"]}];
+var NAMES=["1 · Selector de estudiante","2 · Inicio «Esta semana»","3 · Agenda (calendario)","4 · Ficha de evaluación","5 · Material para descargar","6 · Confirmación"];
+var KEYS=["est","ini","agenda","ficha","mat","conf"];
+var S;
+function reset(){S={p:"est",k:null,e:EVS[0],day:18,rem:{},ent:{},dl:false,from:"ini"}}
+reset();
+var $=function(i){return document.getElementById(i)};
+function head(title,sub,back){return '<div class="top">'+(back?'<button class="back" data-go="'+back+'" aria-label="Volver">‹ Volver</button>':'')+'<div><b>'+title+'</b>'+(sub?'<small>'+sub+'</small>':'')+'</div>'+(S.k!==null&&S.p!=="est"?'<span class="chip">'+KIDS[S.k].n+' · '+KIDS[S.k].c+'</span>':'')+'</div>'}
+function evCard(e,near){return '<div class="card ev'+(near?'':' n')+' row" data-ev="'+e.id+'"><div style="flex:1"><span class="tag'+(near?'':' w')+'">'+(near?'Más próxima':'Programada')+'</span><h3 style="margin:6px 0 2px">'+e.t+'</h3><span class="mu">'+e.f+'</span></div><span style="color:var(--g);font-weight:600;font-size:13px">Ver ficha ›</span></div>'}
+var V={
+est:function(){return head("Apoyo en Casa","Libreta de comunicaciones digital")+'<div class="scr"><h2>¿De quién quiere ver la agenda?</h2><p class="mu">Elija a su hijo o hija para ver sus pruebas.</p>'+KIDS.map(function(k,i){return '<div class="card row" data-kid="'+i+'"><div class="av">'+k.i+'</div><div><h3 style="margin:0">'+k.n+'</h3><span class="mu">'+k.c+'</span></div></div>'}).join('')+'</div>'},
+ini:function(){var k=KIDS[S.k];return head("Esta semana",k.n+" · "+k.c,"est")+'<div class="scr"><h2>Esta semana</h2><p class="mu">Lo que viene en los próximos 7 días.</p>'+evCard(EVS[0],true)+'<div class="card"><h3>Para tener en cuenta</h3><ul class="ck"><li>Evaluaciones pendientes: 3 este mes</li><li>Material disponible en cada ficha</li></ul></div><button class="btn" data-go="agenda">Ver calendario completo</button></div>'},
+agenda:function(){var h='';["Lu","Ma","Mi","Ju","Vi","Sá","Do"].forEach(function(x){h+='<span class="h">'+x+'</span>'});for(var i=0;i<6;i++)h+='<span></span>';for(var d=1;d<=30;d++){var has=EVS.some(function(e){return e.d==d});h+='<button class="'+(has?'ev2 ':'')+(S.day==d?'sel':'')+'" data-day="'+d+'" aria-label="Día '+d+(has?', con evaluación':'')+'">'+d+'</button>'}
+ var ev=EVS.filter(function(e){return e.d==S.day})[0];
+ return head("Agenda","Noviembre 2026","ini")+'<div class="scr"><div class="card"><div class="cal">'+h+'</div><p class="mu" style="margin:10px 0 0">● Día con evaluación</p></div>'+(ev?'<div class="card"><span class="tag">Evaluación</span><h3 style="margin:6px 0 2px">'+ev.t+'</h3><span class="mu">'+ev.f+'</span><button class="btn" data-ev="'+ev.id+'">Ver ficha</button></div>':'<div class="card mu">No hay evaluaciones el día '+S.day+'. Elija un día marcado con punto.</div>')+'</div>'},
+ficha:function(){var e=S.e,r=S.rem[e.id],n=S.ent[e.id];return head(e.t,e.f,S.from)+'<div class="scr"><div class="card"><span class="tag w">Pendiente</span><h2 style="margin-top:8px">'+e.t+'</h2><span class="mu">📅 '+e.f+'</span></div><div class="card"><h3>Qué debe aprender</h3><ul class="ck">'+e.c.map(function(c){return '<li>'+c+'</li>'}).join('')+'</ul></div><div class="card"><h3>Material para estudiar</h3><p class="mu">Guía liviana, preparada por el docente, para ver aquí o imprimir.</p><button class="btn" data-go="mat">Ver y descargar material</button></div><button class="btn '+(r?'done':'alt')+'" data-act="rem">'+(r?'✓ Recordatorio activado':'Activar recordatorio')+'</button><button class="btn '+(n?'done':'alt')+'" data-act="ent">'+(n?'✓ Enterado':'Marcar como enterado')+'</button></div>'},
+mat:function(){var e=S.e;return head("Material de estudio",e.m,"ficha")+'<div class="scr"><div class="sheet"><h4>Guía de estudio · '+e.m+'</h4><p class="mu">Para '+KIDS[S.k].n+' · '+e.f+'</p><b>Qué debe saber</b><ul class="ck">'+e.c.map(function(c){return '<li>'+c+'</li>'}).join('')+'</ul><b>Para practicar en casa</b><p>1. Explique con sus palabras: '+e.c[0].toLowerCase()+'.</p><div class="ln"></div><p>2. Escriba un ejemplo de '+e.c[e.c.length-1].toLowerCase()+'.</p><div class="ln"></div></div><button class="btn" data-act="dl">Descargar PDF imprimible</button><button class="btn alt" data-act="print">Imprimir</button></div>'},
+conf:function(){var e=S.e,m=S.dl?"Material descargado":(S.rem[e.id]?"Recordatorio activado":"Enterado");var l=[];if(S.rem[e.id])l.push("Recordatorio activado para "+e.f);if(S.ent[e.id])l.push("Enterado de "+e.t);if(S.dl)l.push("Material de "+e.m+" descargado");return head("Confirmación","","ficha")+'<div class="scr"><div class="ok"><div class="big">✓</div><h2>'+m+'</h2><p class="mu">'+e.t+' · '+e.f+'</p></div><div class="card"><h3>Acciones realizadas</h3><ul class="ck">'+(l.length?l.map(function(x){return '<li>'+x+'</li>'}).join(''):'<li>Aún no hay acciones. Vuelva a la ficha.</li>')+'</ul></div><button class="btn" data-go="ini">Volver a Esta semana</button></div>'}};
+function toast(t){var x=$("toast");x.textContent=t;x.style.display="block";clearTimeout(toast.h);toast.h=setTimeout(function(){x.style.display="none"},2200)}
+function go(p){if(p!=="est"&&S.k===null)S.k=0;if(p==="ficha"&&S.p!=="mat"&&S.p!=="conf")S.from=S.p==="agenda"?"agenda":"ini";S.p=p;draw()}
+function draw(){$("app").innerHTML=V[S.p]();$("steps").innerHTML=KEYS.map(function(k,i){return '<button class="'+(k===S.p?'on':'')+'" data-go="'+k+'">'+NAMES[i]+'</button>'}).join('')}
+document.addEventListener("click",function(ev){var t=ev.target.closest("[data-go],[data-kid],[data-ev],[data-day],[data-act]");if(!t)return;
+ if(t.dataset.kid!==undefined){S.k=+t.dataset.kid;return go("ini")}
+ if(t.dataset.ev){S.e=EVS.filter(function(e){return e.id==t.dataset.ev})[0];S.from=S.p==="agenda"?"agenda":"ini";S.p="ficha";return draw()}
+ if(t.dataset.day){S.day=+t.dataset.day;return draw()}
+ if(t.dataset.act){var a=t.dataset.act,id=S.e.id;
+  if(a==="rem"){S.rem[id]=true;toast("Recordatorio activado");S.dl=false;S.p="conf";return draw()}
+  if(a==="ent"){S.ent[id]=true;S.dl=false;S.p="conf";return draw()}
+  if(a==="dl"){S.dl=true;S.p="conf";return draw()}
+  if(a==="print"){return window.print()}}
+ if(t.dataset.go)go(t.dataset.go)});
+$("reset").onclick=function(){reset();draw()};
+draw();
+</script>
+</body>
+</html>
