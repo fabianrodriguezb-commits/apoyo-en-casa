@@ -3,9 +3,9 @@ Prototipo de una plataforma que reune, por estudiante, el calendario de pruebas,
 
 Trabajo de la asignatura Interaccion Humano Computador (IHC), Unidad 2, Universidad Mayor.
 
-- **Autor:** [Lorena Delgado, Fabian Rodriguez, Sebastian Villarroel]
-- **Docente:** [Yenny Alexandra Mendez]
-- **Prototipo:** [en espera]
+- **Autor:** Lorena Delgado, Fabian Rodriguez, Sebastian Villarroel
+- **Docente:** Yenny Alexandra Mendez
+- **Prototipo:** https://fabianrodriguezb-commits.github.io/apoyo-en-casa/prototipo/
 
 ## Estructura del repositorio
 
